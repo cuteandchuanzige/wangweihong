@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        //入口函数
+        $(function () {
+            //通过id获得name  失去焦点事件
+            $("#name").blur(function () {
+                var name = $("#name").val();
+                $("span").empty();
+                if (name == "") {
+                    var span = $("<span>请输入用户名!</span>");
+                    $("#name").after(span);
+                    $("#sum").attr("disabled", "disabled");
+                    return false;
+
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "userExist",
+                    data: {
+                        name: $("#name").val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $("span").empty();
+                        if (data == "1") {
+                            var span = $("<span>用户名已存在!</span>");
+                            $("#name").after(span);
+                            $("#sum").attr("disabled", "disabled");
+                        } else {
+                            var span = $("<span>用户名可以使用.</span>");
+                            $("#sum").removeAttr("disabled");
+                            $("#name").after(span);
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(function click() {
+            $("#sum").click(function () {
+                $("span").empty();
+                var name = $("#name").val();
+                var password = $("#password").val();
+                var gender = $("#gender").val();
+                var age = $("#age").val();
+                var address = $("#address").val();
+                if (name == "") {
+                    var span = $("<span>请输入用户名</span>");
+                    $("#name").before(span);
+                    return false;
+                }
+                ;
+                if (password == "") {
+                    var span = $("<span>请输入用户密码</span>");
+                    $("#password").before(span);
+                    return false;
+                }
+                ;
+                if (gender == "") {
+                    var span = $("<span>请输入用户性别</span>");
+                    $("#gender").before(span);
+                    return false;
+                }
+                ;
+                if (age == "") {
+                    var span = $("<span>请输入用户年龄</span>");
+                    $("#age").before(span);
+                    return false;
+                }
+                ;
+                if (address == "") {
+                    var span = $("<span>请输入用户爱好</span>");
+                    $("#hobby").before(span);
+                    return false;
+                }
+                ;
+                return true;
+            });
+        })
+    </script>
+    <!--验证用户登录-->
+    <script type="text/javascript">
+        $(function () {
+            $("#denglu").click(function () {
+                $("span").empty();
+                var names = $("#names").val();
+                var pass = $("#pass").val();
+                if (names == "") {
+                    var span = $("<span>请输入您的用户名</span>")
+                    $("#names").before(span);
+                    return false;
+                }
+                ;
+                if (pass == "") {
+                    var span = $("<span>请输入您的用户密码</span>")
+                    $("#pass").before(span);
+                    return false;
+                }
+                ;
+                return true;
+            });
+        })
+    </script>
+
+
+</head>
+<body>
+<h1>用户登录</h1>
+<div style="width: 500px">
+    <form action="login" method="post" class="form-horizontal">
+
+        <div class="form-group">
+            <label for="names" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="names" placeholder="name" name="name"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="pass" class="col-sm-2 control-label">密 码</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="pass" placeholder="Password" name="password"/>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <!--<button type="submit" class="btn btn-default">登录</button>-->
+                <button type="submit" class="btn btn-primary" id="denglu">登录</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        data-whatever="@mdo">注册
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            </div>
+            <div class="modal-body">
+                <form action="insert" method="post">
+                    <div class="form-group">
+                        <label for="name" class="control-label">用户名</label>
+                        <input type="text" class="form-control" id="name" name="name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">用户密码</label>
+                        <input type="password" class="form-control" id="password" name="password"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="inlineRadio1" value="男"/>男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="inlineRadio2" value="女"/>女
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">用户年龄</label>
+                        <!--<input class="form-control" id="age" name="age"/>-->
+                        <select class="form-control" name="age">
+                            <option value="18">18</option>
+                            <option value="20">20</option>
+                            <option value="19">19</option>
+                            <option value="24">24</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">用户爱好</label>
+                        <!--<input class="form-control" id="address" name="hobby"/>-->
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox1" value="听歌" name="hobby"/>听歌
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox2" value="学习" name="hobby"/>学习
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox3" value="打游戏" name="hobby"/>打游戏
+                        </label>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="sum">确认注册</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
